@@ -33,19 +33,19 @@ FLAGS = tf.app.flags.FLAGS
 
 
 def run_training():
-    if not os.path.exists(FLAGS.model_dir):
-        os.makedirs(FLAGS.model_dir)
+    if not os.path.exists(FLAGS.model_dir):  //没有路径
+        os.makedirs(FLAGS.model_dir)  //创造路径
 
-    poems_vector, word_to_int, vocabularies = process_poems(FLAGS.file_path)
-    batches_inputs, batches_outputs = generate_batch(FLAGS.batch_size, poems_vector, word_to_int)
+    poems_vector, word_to_int, vocabularies = process_poems(FLAGS.file_path)  //前置处理，生成词向量
+    batches_inputs, batches_outputs = generate_batch(FLAGS.batch_size, poems_vector, word_to_int) //分成batch
 
     input_data = tf.placeholder(tf.int32, [FLAGS.batch_size, None])
     output_targets = tf.placeholder(tf.int32, [FLAGS.batch_size, None])
 
     end_points = rnn_model(model='lstm', input_data=input_data, output_data=output_targets, vocab_size=len(
-        vocabularies), rnn_size=128, num_layers=2, batch_size=64, learning_rate=FLAGS.learning_rate)
+        vocabularies), rnn_size=128, num_layers=2, batch_size=64, learning_rate=FLAGS.learning_rate)  //建立RNN模型
 
-    saver = tf.train.Saver(tf.global_variables())
+    saver = tf.train.Saver(tf.global_variables())  //
     init_op = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
     with tf.Session() as sess:
         # sess = tf_debug.LocalCLIDebugWrapperSession(sess=sess)
